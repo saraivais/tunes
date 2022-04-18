@@ -1,14 +1,20 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
+import { createUser } from '../services/userAPI';
+import LoadingPage from '../components/LoadingPage';
 
 class Login extends React.Component {
   constructor() {
     super();
 
+    this.submitName = this.submitName.bind(this);
     this.enableButton = this.enableButton.bind(this);
 
     this.state = {
       IsButtonOff: true,
       NameInput: '',
+      IsLoading: false,
+      isFunctionDone: false,
     };
   }
 
@@ -21,8 +27,18 @@ class Login extends React.Component {
     });
   }
 
+  async submitName() {
+    this.setState({ IsLoading: true, isFunctionDone: false });
+    const { NameInput } = this.state;
+    await createUser({ name: NameInput });
+    this.setState({
+      IsLoading: false,
+      isFunctionDone: true,
+    });
+  }
+
   render() {
-    const { IsButtonOff, NameInput } = this.state;
+    const { IsButtonOff, NameInput, IsLoading, isFunctionDone } = this.state;
 
     return (
       <div data-testid="page-login">
@@ -36,10 +52,13 @@ class Login extends React.Component {
           type="button"
           data-testid="login-submit-button"
           disabled={ IsButtonOff }
+          onClick={ this.submitName }
         >
           Entrar
 
         </button>
+        { IsLoading && <LoadingPage /> }
+        { isFunctionDone && <Redirect to="/search" /> }
       </div>
     );
   }
