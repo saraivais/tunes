@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { getUser } from '../services/userAPI';
 import LoadingPage from './LoadingPage';
 
@@ -27,6 +28,11 @@ class Header extends React.Component {
     const { recoveredName, isLoading } = this.state;
     return (
       <header data-testid="header-component">
+        <nav>
+          <Link to="/search" data-testid="link-to-search">Search</Link>
+          <Link to="/favorites" data-testid="link-to-favorites">Favorites</Link>
+          <Link to="/profile" data-testid="link-to-profile">Profile</Link>
+        </nav>
         { isLoading ? <LoadingPage />
           : (
             <p data-testid="header-user-name">
