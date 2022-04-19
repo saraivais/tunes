@@ -3,6 +3,8 @@ import propTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../components/MusicCard';
+import { getFavoriteSongs } from '../services/favoriteSongsAPI';
+// import LoadingPage from '../components/LoadingPage';
 
 class Album extends React.Component {
   constructor() {
@@ -16,12 +18,15 @@ class Album extends React.Component {
       AlbumName: '',
       ArtistName: '',
       IsSearchDone: false,
+      IsGettingFavs: true,
+      AllFavSongs: '',
     };
   }
 
   async componentDidMount() {
     await this.getSongs();
     this.separateArray();
+    this.recoverFavs();
   }
 
   async getSongs() {
@@ -43,26 +48,46 @@ class Album extends React.Component {
     });
   }
 
+  async recoverFavs() {
+    this.setState({ IsGettingFavs: true });
+    const FavSongsArray = await getFavoriteSongs();
+    console.log(FavSongsArray);
+    this.setState({
+      IsGettingFavs: false,
+      AllFavSongs: FavSongsArray,
+    });
+  }
+
   render() {
-    const { IsSearchDone, AlbumSongs, AlbumName, ArtistName } = this.state;
+    const {
+      IsSearchDone,
+      AlbumSongs,
+      AlbumName,
+      ArtistName,
+      IsGettingFavs,
+      AllFavSongs } = this.state;
+    console.log('AllFavSongs', AllFavSongs);
+    console.log('IsSearchDone', IsSearchDone);
+    console.log('IsGettingFavs', IsGettingFavs);
     return (
       <>
         <Header />
         <div data-testid="page-album">
-          { IsSearchDone
-          && (
-            <div>
-              <h1 data-testid="artist-name">{ArtistName}</h1>
-              <h2 data-testid="album-name">{AlbumName}</h2>
-              {AlbumSongs
-                .map((songObject) => (<MusicCard
-                  key={ songObject.trackId }
-                  entireObject={ songObject }
-                  MusicName={ songObject.trackName }
-                  MusicURL={ songObject.previewUrl }
-                  MusicId={ songObject.trackId }
-                />)) }
-            </div>)}
+          { (IsSearchDone && !IsGettingFavs)
+            && (
+              <div>
+                <h1 data-testid="artist-name">{ArtistName}</h1>
+                <h2 data-testid="album-name">{AlbumName}</h2>
+                {AlbumSongs
+                  .map((songObject) => (<MusicCard
+                    key={ songObject.trackId }
+                    entireObject={ songObject }
+                    MusicName={ songObject.trackName }
+                    MusicURL={ songObject.previewUrl }
+                    MusicId={ songObject.trackId }
+                    AllFavs={ AllFavSongs }
+                  />)) }
+              </div>)}
         </div>
       </>);
   }
