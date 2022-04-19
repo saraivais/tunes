@@ -1,7 +1,7 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import LoadingPage from './LoadingPage';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, removeSong } from '../services/favoriteSongsAPI';
 
 class MusicCard extends React.Component {
   constructor(props) {
@@ -28,14 +28,14 @@ class MusicCard extends React.Component {
     });
     if (value) {
       this.sendSongToFavorites(entireObject);
+    } else {
+      this.removeSongFromFavorites(entireObject);
     }
   }
 
   IsThisAFav() {
     const { AllFavs, MusicId } = this.props;
-    console.log('AllFavs', AllFavs);
     const IsFav = AllFavs.some((FavSong) => FavSong.trackId === MusicId);
-    console.log(IsFav);
     this.setState({
       CheckboxChecked: IsFav,
     });
@@ -44,6 +44,12 @@ class MusicCard extends React.Component {
   async sendSongToFavorites(SongObject) {
     this.setState({ IsSendingSong: true });
     await addSong(SongObject);
+    this.setState({ IsSendingSong: false });
+  }
+
+  async removeSongFromFavorites(SongObject) {
+    this.setState({ IsSendingSong: true });
+    await removeSong(SongObject);
     this.setState({ IsSendingSong: false });
   }
 
