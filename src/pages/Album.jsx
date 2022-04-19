@@ -55,10 +55,12 @@ class Album extends React.Component {
               <h1 data-testid="artist-name">{ArtistName}</h1>
               <h2 data-testid="album-name">{AlbumName}</h2>
               {AlbumSongs
-                .map(({ trackId, trackName, previewUrl }) => (<MusicCard
-                  key={ trackId }
-                  MusicName={ trackName }
-                  MusicURL={ previewUrl }
+                .map((songObject) => (<MusicCard
+                  key={ songObject.trackId }
+                  entireObject={ songObject }
+                  MusicName={ songObject.trackName }
+                  MusicURL={ songObject.previewUrl }
+                  MusicId={ songObject.trackId }
                 />)) }
             </div>)}
         </div>
