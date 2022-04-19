@@ -32,10 +32,8 @@ class Album extends React.Component {
 
   separateArray() {
     const { MusicSearchResult } = this.state;
-    console.log(MusicSearchResult);
     const AlbumInfo = MusicSearchResult
       .filter(({ wrapperType }) => wrapperType !== 'track');
-    console.log(AlbumInfo);
     this.setState({
       AlbumSongs: MusicSearchResult
         .filter(({ kind }) => kind === 'song'),
