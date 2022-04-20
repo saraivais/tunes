@@ -48,6 +48,7 @@ class ProfileEdit extends React.Component {
       userImage: recoveredData.image,
       IsGettingUserData: false,
     });
+    this.validateButton();
   }
 
   validateButton() {
