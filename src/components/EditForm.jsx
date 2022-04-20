@@ -1,8 +1,9 @@
 import React from 'react';
+import propTypes from 'prop-types';
 
 class EditForm extends React.Component {
   render() {
-    const { name, mail, desc, img, changeFunc } = this.props;
+    const { name, mail, desc, img, changeFunc, buttonStatus } = this.props;
     return (
       <section>
         <label htmlFor="userName">
@@ -51,6 +52,7 @@ class EditForm extends React.Component {
           type="button"
           name="saveButton"
           data-testid="edit-button-save"
+          disabled={ buttonStatus }
         >
           Salvar e Enviar
 
@@ -58,6 +60,15 @@ class EditForm extends React.Component {
       </section>
     );
   }
+}
+
+EditForm.propTypes = {
+  name: propTypes.string.isRequired,
+  mail: propTypes.string.isRequired,
+  desc: propTypes.string.isRequired,
+  img: propTypes.string.isRequired,
+  changeFunc: propTypes.func.isRequired,
+  buttonStatus: propTypes.bool.isRequired,
 }
 
 export default EditForm;
