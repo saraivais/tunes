@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import { getUser } from '../services/userAPI';
 import UserCard from '../components/UserCard';
@@ -37,6 +38,7 @@ class Profile extends React.Component {
                 userImage={ image }
               />
             </div>)}
+        <Link to="/profile/edit">Editar perfil</Link>
       </>);
   }
 }
