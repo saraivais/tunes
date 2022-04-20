@@ -13,7 +13,6 @@ class UserCard extends React.Component {
           data-testid="profile-image"
         />
         <div>
-          <h1>{ userName }</h1>
           <h3>Nome</h3>
           <p>{ userName }</p>
           <h3>E-mail</h3>
