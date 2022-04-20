@@ -1,6 +1,7 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
-import { getUser } from '../services/userAPI';
+import { getUser, updateUser } from '../services/userAPI';
 import LoadingPage from '../components/LoadingPage';
 import EditForm from '../components/EditForm';
 
@@ -11,6 +12,7 @@ class ProfileEdit extends React.Component {
     this.recoverUserData = this.recoverUserData.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.validateButton = this.validateButton.bind(this);
+    this.sendUserInfo = this.sendUserInfo.bind(this);
 
     this.state = {
       userName: '',
@@ -19,6 +21,8 @@ class ProfileEdit extends React.Component {
       userImage: '',
       IsGettingUserData: false,
       IsButtonOff: true,
+      IsSendingUserData: false,
+      IsReadyToRedirect: false,
     };
   }
 
@@ -55,9 +59,24 @@ class ProfileEdit extends React.Component {
       !userImage.length,
       !userMail.includes('@')];
     const areFieldsOk = !allFields.every((field) => field === false);
-    console.log('areFieldsOk', areFieldsOk);
     this.setState({
       IsButtonOff: areFieldsOk,
+    });
+  }
+
+  async sendUserInfo() {
+    const { userName, userMail, userDescription, userImage } = this.state;
+    const userObj = {
+      name: userName,
+      email: userMail,
+      image: userImage,
+      description: userDescription,
+    };
+    this.setState({ IsSendingUserData: true });
+    await updateUser(userObj);
+    this.setState({
+      IsSendingUserData: false,
+      IsReadyToRedirect: true,
     });
   }
 
@@ -69,11 +88,13 @@ class ProfileEdit extends React.Component {
       userImage,
       IsGettingUserData,
       IsButtonOff,
+      IsSendingUserData,
+      IsReadyToRedirect,
     } = this.state;
     return (
       <>
         <Header />
-        {IsGettingUserData ? <LoadingPage />
+        {IsGettingUserData || IsSendingUserData ? <LoadingPage />
           : (
             <div data-testid="page-profile-edit">
               <EditForm
@@ -83,8 +104,10 @@ class ProfileEdit extends React.Component {
                 img={ userImage }
                 changeFunc={ this.handleChange }
                 buttonStatus={ IsButtonOff }
+                saveBtnFunc={ this.sendUserInfo }
               />
             </div>)}
+        {IsReadyToRedirect && <Redirect to="/profile" /> }
       </>);
   }
 }
