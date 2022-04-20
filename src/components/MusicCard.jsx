@@ -4,8 +4,8 @@ import LoadingPage from './LoadingPage';
 import { addSong, removeSong } from '../services/favoriteSongsAPI';
 
 class MusicCard extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.sendSongToFavorites = this.sendSongToFavorites.bind(this);
     this.handleCheckbox = this.handleCheckbox.bind(this);
@@ -21,7 +21,7 @@ class MusicCard extends React.Component {
   }
 
   handleCheckbox({ target }) {
-    const { entireObject } = this.props;
+    const { entireObject, ClickFunction } = this.props;
     const value = target.checked;
     this.setState({
       CheckboxChecked: value,
@@ -31,6 +31,7 @@ class MusicCard extends React.Component {
     } else {
       this.removeSongFromFavorites(entireObject);
     }
+    ClickFunction();
   }
 
   IsThisAFav() {
@@ -69,13 +70,16 @@ class MusicCard extends React.Component {
               <code>audio</code>
               .
             </audio>
-            <input
-              type="checkbox"
-              data-testid={ `checkbox-music-${MusicId}` }
-              checked={ CheckboxChecked }
-              onChange={ this.handleCheckbox }
-            />
-            Favorita
+            <label htmlFor={ MusicId }>
+              Favorita
+              <input
+                type="checkbox"
+                id={ MusicId }
+                data-testid={ `checkbox-music-${MusicId}` }
+                checked={ CheckboxChecked }
+                onChange={ this.handleCheckbox }
+              />
+            </label>
           </section>)
     );
   }
@@ -87,6 +91,11 @@ MusicCard.propTypes = {
   MusicId: propTypes.number.isRequired,
   entireObject: propTypes.shape().isRequired,
   AllFavs: propTypes.arrayOf(Object).isRequired,
+  ClickFunction: propTypes.func,
+};
+
+MusicCard.defaultProps = {
+  ClickFunction: () => console.log('boo'),
 };
 
 export default MusicCard;
