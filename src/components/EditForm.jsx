@@ -3,7 +3,15 @@ import propTypes from 'prop-types';
 
 class EditForm extends React.Component {
   render() {
-    const { name, mail, desc, img, changeFunc, buttonStatus } = this.props;
+    const {
+      name,
+      mail,
+      desc,
+      img,
+      changeFunc,
+      buttonStatus,
+      saveBtnFunc,
+    } = this.props;
     return (
       <section>
         <label htmlFor="userName">
@@ -53,6 +61,7 @@ class EditForm extends React.Component {
           name="saveButton"
           data-testid="edit-button-save"
           disabled={ buttonStatus }
+          onClick={ saveBtnFunc }
         >
           Salvar e Enviar
 
@@ -69,6 +78,7 @@ EditForm.propTypes = {
   img: propTypes.string.isRequired,
   changeFunc: propTypes.func.isRequired,
   buttonStatus: propTypes.bool.isRequired,
-}
+  saveBtnFunc: propTypes.func.isRequired,
+};
 
 export default EditForm;
