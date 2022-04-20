@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import propTypes from 'prop-types';
 
 class UserCard extends React.Component {
@@ -20,7 +19,6 @@ class UserCard extends React.Component {
           <h3>Descrição</h3>
           <p>{ userDesc }</p>
         </div>
-        <Link to="/profile/edit">Editar perfil</Link>
       </section>);
   }
 }
