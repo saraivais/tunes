@@ -36,9 +36,7 @@ class Header extends React.Component {
         { isLoading ? <LoadingPage />
           : (
             <p data-testid="header-user-name">
-              Hello,
-              {' '}
-              {recoveredName}
+              {`Hello, ${recoveredName}`}
             </p>)}
       </header>);
   }
